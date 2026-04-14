@@ -154,7 +154,26 @@ export function SimpleDialPage() {
     <div className={cls.page}>
       <div className={cls.dial}>
         <div className={cls.ring}>
-          <TimerRing progress={progress} sizePx={size} strokePx={10} danger={timer.status === 'finished'} />
+          <TimerRing
+            progress={progress}
+            sizePx={size}
+            strokePx={12}
+            danger={timer.status === 'finished'}
+          />
+        </div>
+        <div className={cls.controlsBar}>
+          <Button variant="primary" size="sm" onClick={pickNext}>
+            Next
+          </Button>
+          <Button size="sm" onClick={onDone} disabled={current == null}>
+            Done
+          </Button>
+          <Button size="sm" onClick={onSkip}>
+            Skip
+          </Button>
+          <Button size="sm" variant="destructive" onClick={onNotAvailable}>
+            Not avail
+          </Button>
         </div>
         <div className={cls.center}>
           <div className={cls.number}>
@@ -195,21 +214,7 @@ export function SimpleDialPage() {
           </div>
           <div className={cls.status}>{statusLabel}</div>
         </div>
-        <div className={cls.controls}>
-          <Button variant="primary" size="sm" onClick={pickNext}>
-            Next
-          </Button>
-          <Button size="sm" onClick={onDone} disabled={current == null}>
-            Done
-          </Button>
-          <Button size="sm" onClick={onSkip}>
-            Skip
-          </Button>
-          <Button size="sm" variant="destructive" onClick={onNotAvailable}>
-            Not avail
-          </Button>
-        </div>
-        <div className={cls.bottomRow}>
+        <div className={cls.bottomBar}>
           <div className={cls.timerControls}>
             <Button size="sm" variant="ghost" onClick={onStartPause}>
               {startPauseLabel}

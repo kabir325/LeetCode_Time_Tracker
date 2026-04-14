@@ -1,6 +1,6 @@
 .base {
   border: 1px solid var(--border);
-  background: var(--surface);
+  background: rgba(20, 24, 35, 0.8);
   color: var(--text);
   border-radius: 999px;
   font: 600 12px/1 var(--sans);
@@ -44,6 +44,7 @@
 
 .secondary:hover {
   border-color: rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.06);
 }
 
 .destructive {
@@ -65,4 +66,3 @@
   background: rgba(255, 255, 255, 0.06);
   border-color: rgba(255, 255, 255, 0.08);
 }
-

@@ -1,5 +1,6 @@
 .base {
   display: block;
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.35));
 }
 
 .track {
@@ -13,4 +14,3 @@
 .danger .progress {
   stroke: var(--danger);
 }
-
