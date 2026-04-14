@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Button } from '../components/Button'
 import { TimerRing } from '../components/TimerRing'
 import { randomInt } from '../lib/random'
 import { clampNumber, formatMmSs } from '../lib/time'
-import type { TimerStatus } from '../shared/types'
+import type { DialState, TimerStatus } from '../shared/types'
 import cls from './simpleDial.module.css'
 
 type TimerState = {
@@ -29,15 +29,19 @@ export function SimpleDialPage() {
   const [current, setCurrent] = useState<number | null>(null)
   const [blockedIds, setBlockedIds] = useState<number[]>([])
   const [doneIds, setDoneIds] = useState<number[]>([])
+  const [skippedCount, setSkippedCount] = useState(0)
+  const [notAvailableCount, setNotAvailableCount] = useState(0)
+  const [doneCount, setDoneCount] = useState(0)
 
-  const [minutes, setMinutes] = useState('45')
+  const [durationSecText, setDurationSecText] = useState('2700')
   const [timer, setTimer] = useState<TimerState>({
     status: 'idle',
-    durationMs: 45 * 60 * 1000,
-    remainingMs: 45 * 60 * 1000,
+    durationMs: 2700 * 1000,
+    remainingMs: 2700 * 1000,
   })
 
   const tickRef = useRef<number | null>(null)
+  const saveRef = useRef<number | null>(null)
 
   useEffect(() => {
     // For Electron overlay: make the body transparent
@@ -48,15 +52,78 @@ export function SimpleDialPage() {
     }
   }, [])
 
+  const durationSec = useMemo(() => {
+    return clampNumber(Number.parseInt(durationSecText || '0', 10) || 1, 1, 6 * 60 * 60)
+  }, [durationSecText])
+
   useEffect(() => {
-    const durationSec = clampNumber(Number.parseInt(minutes || '0', 10), 1, 6 * 60 * 60)
     const ms = durationSec * 1000
     setTimer((t) =>
       t.status === 'idle' || t.status === 'finished'
         ? { status: 'idle', durationMs: ms, remainingMs: ms }
         : t,
     )
-  }, [minutes])
+  }, [durationSec])
+
+  useEffect(() => {
+    let cancelled = false
+    const load = async () => {
+      const fromApi = await window.lcTimer?.dial?.getState?.()
+      if (fromApi) return fromApi as DialState
+      const raw = localStorage.getItem('lc_timer_dial_state')
+      return raw ? (JSON.parse(raw) as DialState) : null
+    }
+
+    void load()
+      .then((state) => {
+        if (!state || cancelled) return
+        setMinId(state.range.min)
+        setMaxId(state.range.max)
+        setCurrent(state.current)
+        setBlockedIds(state.blockedIds ?? [])
+        setDoneIds(state.doneIds ?? [])
+        setDoneCount(state.counts?.done ?? 0)
+        setSkippedCount(state.counts?.skipped ?? 0)
+        setNotAvailableCount(state.counts?.notAvailable ?? 0)
+        setDurationSecText(String(state.durationSec ?? 2700))
+      })
+      .catch(() => {})
+
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  useEffect(() => {
+    const state: DialState = {
+      range: { min: minId, max: maxId },
+      durationSec,
+      current,
+      blockedIds,
+      doneIds,
+      counts: { done: doneCount, skipped: skippedCount, notAvailable: notAvailableCount },
+      updatedAt: new Date().toISOString(),
+    }
+
+    const save = async () => {
+      try {
+        await window.lcTimer?.dial?.setState?.(state)
+      } catch {}
+      try {
+        localStorage.setItem('lc_timer_dial_state', JSON.stringify(state))
+      } catch {}
+    }
+
+    if (saveRef.current) window.clearTimeout(saveRef.current)
+    saveRef.current = window.setTimeout(() => {
+      void save()
+    }, 250)
+
+    return () => {
+      if (saveRef.current) window.clearTimeout(saveRef.current)
+      saveRef.current = null
+    }
+  }, [blockedIds, current, doneCount, doneIds, durationSec, maxId, minId, notAvailableCount, skippedCount])
 
   useEffect(() => {
     if (timer.status !== 'running') return
@@ -134,16 +201,19 @@ export function SimpleDialPage() {
   const onDone = () => {
     if (current == null) return
     if (!doneIds.includes(current)) setDoneIds((prev) => [...prev, current])
+    setDoneCount((c) => c + 1)
     pickNext()
   }
 
   const onNotAvailable = () => {
     if (current == null) return
     if (!blockedIds.includes(current)) setBlockedIds((prev) => [...prev, current])
+    setNotAvailableCount((c) => c + 1)
     pickNext()
   }
 
   const onSkip = () => {
+    setSkippedCount((c) => c + 1)
     pickNext()
   }
 
@@ -173,6 +243,16 @@ export function SimpleDialPage() {
           </Button>
           <Button size="sm" variant="destructive" onClick={onNotAvailable}>
             Not avail
+          </Button>
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={() => {
+              void window.lcTimer?.app?.quit?.()
+              window.close()
+            }}
+          >
+            Quit
           </Button>
         </div>
         <div className={cls.center}>
@@ -213,6 +293,11 @@ export function SimpleDialPage() {
             />
           </div>
           <div className={cls.status}>{statusLabel}</div>
+          <div className={cls.statsRow}>
+            <span className={cls.statPill}>Done {doneCount}</span>
+            <span className={cls.statPill}>Skip {skippedCount}</span>
+            <span className={cls.statPill}>NA {notAvailableCount}</span>
+          </div>
         </div>
         <div className={cls.bottomBar}>
           <div className={cls.timerControls}>
@@ -225,9 +310,9 @@ export function SimpleDialPage() {
             <div className={cls.minutesField}>
               <input
                 className={cls.minutesInput}
-                value={minutes}
+                value={durationSecText}
                 inputMode="numeric"
-                onChange={(e) => setMinutes(e.target.value.replace(/[^\d]/g, ''))}
+                onChange={(e) => setDurationSecText(e.target.value.replace(/[^\d]/g, ''))}
               />
               <span className={cls.minutesLabel}>sec</span>
             </div>

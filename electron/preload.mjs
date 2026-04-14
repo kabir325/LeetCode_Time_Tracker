@@ -20,7 +20,13 @@ const api = {
   shell: {
     openExternal: (url) => ipcRenderer.invoke('shell:openExternal', url),
   },
+  dial: {
+    getState: () => ipcRenderer.invoke('dial:getState'),
+    setState: (state) => ipcRenderer.invoke('dial:setState', state),
+  },
+  app: {
+    quit: () => ipcRenderer.invoke('app:quit'),
+  },
 }
 
 contextBridge.exposeInMainWorld('lcTimer', api)
-

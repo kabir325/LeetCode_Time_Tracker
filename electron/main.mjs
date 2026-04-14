@@ -18,6 +18,15 @@ const store = new Store({
         sizePx: 300,
       },
     },
+    dialState: {
+      range: { min: 1, max: 300 },
+      durationSec: 2700,
+      current: null,
+      blockedIds: [],
+      doneIds: [],
+      counts: { done: 0, skipped: 0, notAvailable: 0 },
+      updatedAt: new Date().toISOString(),
+    },
     problems: [],
     history: [],
   },
@@ -231,6 +240,16 @@ function registerIpc() {
     if (typeof url !== 'string' || !url.trim()) return
     await shell.openExternal(url)
   })
+
+  ipcMain.handle('dial:getState', async () => store.get('dialState'))
+  ipcMain.handle('dial:setState', async (_event, state) => {
+    if (!state || typeof state !== 'object') return
+    store.set('dialState', state)
+  })
+
+  ipcMain.handle('app:quit', async () => {
+    app.quit()
+  })
 }
 
 function registerShortcuts() {
@@ -294,4 +313,3 @@ app.on('window-all-closed', () => {
 app.on('will-quit', () => {
   globalShortcut.unregisterAll()
 })
-

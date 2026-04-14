@@ -1,4 +1,4 @@
-import type { OverlayWindowState, PickHistoryItem, Problem, Settings } from './types'
+import type { DialState, OverlayWindowState, PickHistoryItem, Problem, Settings } from './types'
 
 export interface LcTimerApi {
   overlay: {
@@ -20,5 +20,11 @@ export interface LcTimerApi {
   shell: {
     openExternal: (url: string) => Promise<void>
   }
+  dial: {
+    getState: () => Promise<DialState>
+    setState: (state: DialState) => Promise<void>
+  }
+  app: {
+    quit: () => Promise<void>
+  }
 }
-

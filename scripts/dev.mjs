@@ -46,6 +46,10 @@ process.on('SIGTERM', shutdown)
 try {
   await waitForServer(devUrl, 60_000)
   electronProc = run(npmCmd, ['run', 'dev:electron'], 'electron')
+  electronProc.on('exit', (code) => {
+    shutdown()
+    process.exit(code ?? 0)
+  })
 } catch (e) {
   shutdown()
   process.exitCode = 1

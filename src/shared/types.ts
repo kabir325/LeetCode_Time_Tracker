@@ -38,3 +38,18 @@ export interface Settings {
   }
 }
 
+export interface DialCounts {
+  done: number
+  skipped: number
+  notAvailable: number
+}
+
+export interface DialState {
+  range: { min: number; max: number }
+  durationSec: number
+  current: number | null
+  blockedIds: number[]
+  doneIds: number[]
+  counts: DialCounts
+  updatedAt: string
+}

@@ -92,6 +92,25 @@
   gap: 6px;
 }
 
+.statsRow {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 2px;
+}
+
+.statPill {
+  padding: 5px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(0, 0, 0, 0.22);
+  color: var(--muted);
+  font: 700 10px/1 var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
 .minutesField {
   display: flex;
   align-items: center;
