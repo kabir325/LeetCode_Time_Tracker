@@ -1,0 +1,16 @@
+.base {
+  display: block;
+}
+
+.track {
+  stroke: rgba(255, 255, 255, 0.08);
+}
+
+.progress {
+  stroke: var(--accent);
+}
+
+.danger .progress {
+  stroke: var(--danger);
+}
+

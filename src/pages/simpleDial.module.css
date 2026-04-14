@@ -1,0 +1,139 @@
+.page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: transparent; /* transparent for electron */
+}
+
+.dial {
+  position: relative;
+  width: 260px;
+  height: 260px;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  padding: 14px;
+  box-sizing: border-box;
+  -webkit-app-region: drag; /* Let user drag the window by the dial */
+}
+
+/* Ensure buttons and inputs are clickable */
+.controls, .bottomRow, .center {
+  -webkit-app-region: no-drag;
+}
+
+.ring {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.center {
+  position: absolute;
+  inset: 32px 24px 82px;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  gap: 4px;
+  pointer-events: auto;
+}
+
+.number {
+  font: 800 22px/1.2 var(--sans);
+}
+
+.time {
+  font: 700 18px/1 var(--mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.status {
+  font: 600 11px/1 var(--sans);
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.controls {
+  position: absolute;
+  left: 50%;
+  top: 16px;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+}
+
+.bottomRow {
+  position: absolute;
+  inset: auto 12px 12px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.timerControls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.minutesField {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.minutesInput {
+  width: 36px;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--text);
+  font: 700 13px/1 var(--mono);
+  text-align: right;
+}
+
+.minutesLabel {
+  font: 600 11px/1 var(--sans);
+  color: var(--muted);
+}
+
+.rangeRow {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(0, 0, 0, 0.3);
+  margin-top: 2px;
+}
+
+.rangeLabel {
+  font: 600 11px/1 var(--sans);
+  color: var(--muted);
+  margin-right: 4px;
+}
+
+.rangeInput {
+  width: 40px;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--text);
+  font: 700 13px/1 var(--mono);
+  text-align: right;
+}
+
+.rangeDash {
+  color: var(--muted);
+  font: 700 12px/1 var(--sans);
+}

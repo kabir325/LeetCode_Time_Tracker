@@ -1,0 +1,68 @@
+.base {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 999px;
+  font: 600 12px/1 var(--sans);
+  letter-spacing: 0.2px;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition:
+    background 150ms ease,
+    border-color 150ms ease,
+    transform 80ms ease;
+}
+
+.base:active {
+  transform: translateY(1px);
+}
+
+.base:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.sm {
+  padding: 8px 12px;
+  font-size: 11px;
+}
+
+.md {
+  padding: 10px 14px;
+  font-size: 12px;
+}
+
+.primary {
+  background: var(--accent);
+  border-color: transparent;
+  color: #fff;
+}
+
+.primary:hover {
+  filter: brightness(1.06);
+}
+
+.secondary:hover {
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+.destructive {
+  background: var(--danger);
+  border-color: transparent;
+  color: #fff;
+}
+
+.destructive:hover {
+  filter: brightness(1.06);
+}
+
+.ghost {
+  background: transparent;
+  border-color: transparent;
+}
+
+.ghost:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+

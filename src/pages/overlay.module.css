@@ -1,0 +1,172 @@
+.root {
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  overflow: hidden;
+  user-select: none;
+}
+
+.widget {
+  position: relative;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+}
+
+.dragLayer {
+  position: absolute;
+  inset: 0;
+  -webkit-app-region: drag;
+}
+
+.ring {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.center {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  gap: 4px;
+  pointer-events: none;
+}
+
+.time {
+  font: 700 28px/1 var(--mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+
+.status {
+  font: 600 11px/1 var(--sans);
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.controls {
+  position: absolute;
+  left: 50%;
+  bottom: 10px;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  padding: 6px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  -webkit-app-region: no-drag;
+}
+
+.popover {
+  position: absolute;
+  left: 50%;
+  bottom: 56px;
+  transform: translateX(-50%);
+  width: min(320px, calc(100vw - 24px));
+  background: rgba(20, 24, 35, 0.92);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 12px;
+  display: grid;
+  gap: 10px;
+  -webkit-app-region: no-drag;
+}
+
+.popoverTitle {
+  font: 700 12px/1 var(--sans);
+  color: var(--text);
+  letter-spacing: 0.3px;
+}
+
+.presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+  border-radius: 999px;
+  padding: 8px 10px;
+  font: 600 12px/1 var(--sans);
+  cursor: pointer;
+}
+
+.chip:hover {
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.customRow {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto;
+  align-items: center;
+  gap: 8px;
+}
+
+.input {
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+  padding: 10px 10px;
+  font: 700 13px/1 var(--mono);
+  font-variant-numeric: tabular-nums;
+  outline: none;
+}
+
+.input:focus {
+  border-color: rgba(79, 140, 255, 0.7);
+}
+
+.sep {
+  color: var(--muted);
+  font: 700 14px/1 var(--mono);
+}
+
+.sliderRow {
+  display: grid;
+  gap: 10px;
+}
+
+.sliderLabel {
+  display: grid;
+  gap: 6px;
+  font: 600 12px/1 var(--sans);
+  color: var(--muted);
+}
+
+.slider {
+  width: 100%;
+}
+
+.clickThroughBadge {
+  position: absolute;
+  inset: auto 10px 10px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  -webkit-app-region: no-drag;
+  font: 600 11px/1 var(--sans);
+  color: var(--muted);
+}
+
