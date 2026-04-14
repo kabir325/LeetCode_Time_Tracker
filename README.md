@@ -1,73 +1,63 @@
-# React + TypeScript + Vite
+# LC Timer Overlay (LeetCode Focus Dial)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A small always-on-top desktop dial for LeetCode practice:
+- Randomly picks a problem number from a range (e.g. 1–300)
+- Lets you mark outcomes: Done / Skip / Not available
+- Runs a countdown timer so you stay focused
 
-Currently, two official plugins are available:
+The dial is designed to float above your browser (picture-in-picture style), so you can keep it visible while solving.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Requirements
+- Windows 10/11 (recommended)
+- Node.js 20+ (Node 22 works)
+- npm (comes with Node)
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Setup
+From the project root:
+```bash
+cd app
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Run (dev)
+This starts:
+- Vite dev server (renderer UI)
+- Electron app (always-on-top overlay dial)
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+cd app
+npm run dev
 ```
+
+If Electron shows:
+`Electron failed to install correctly...`
+run:
+```bash
+cd app
+cd node_modules/electron
+node install.js
+```
+
+## Build
+```bash
+cd app
+npm run build
+```
+
+## Usage
+- Set Range (e.g. 1–300)
+- Press Next to generate a problem number
+- Open that number on LeetCode
+  - Not avail: premium/locked/unavailable for you (won’t show again)
+  - Skip: just roll a different number
+  - Done: completed (won’t show again)
+- Set timer seconds and press Start
+
+## Files
+- Electron entry: [electron/main.mjs](file:///c:/Users/kabir/Documents/trae_projects/LC_Timer/app/electron/main.mjs)
+- Dial UI: [SimpleDialPage.tsx](file:///c:/Users/kabir/Documents/trae_projects/LC_Timer/app/src/pages/SimpleDialPage.tsx)
+- Dial styles: [simpleDial.module.css](file:///c:/Users/kabir/Documents/trae_projects/LC_Timer/app/src/pages/simpleDial.module.css)
+
+## Notes
+- The overlay window is always-on-top and draggable.
+- Settings are stored locally via `electron-store`.
